@@ -1,0 +1,18 @@
+{"n":"202002121942099743","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121942096065","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121943252361","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121943252535","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121944012650","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121944019880","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121944567227","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121944567804","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121949123194","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121949125646","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121949464677","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121949468546","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121950091494","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121950098760","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121950157395","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121950159634","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
+{"n":"202002121950538627","l":2,"m":"mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":210,"c":{"result":false,"type":1,"all":false}}
+{"n":"202002121950534493","l":2,"m":"Invalid argument supplied for foreach()","f":"D:\\Workspace\\Hochat\\class\\db.class.php","p":211,"c":{"result":false,"type":1,"all":false,"v":null}}
