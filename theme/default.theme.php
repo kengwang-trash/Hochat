@@ -1,3 +1,4 @@
+<?php define('THEMENAME','default'); if (THEME!=THEMENAME) exit;?>
 <!doctype html>
 <html>
 <head>
@@ -37,19 +38,19 @@
         </form>
 
     </div>
-	<# loop comments as comment #>
+	<?php foreach ($FRONT['comments'] as $comment): arraytofront('comment',$comment); ?>
     <div class="ho-chat">
-        <img src="https://cdn.v2ex.com/gravatar/<%=comment.mailmd5=%>">
+        <img src="https://cdn.v2ex.com/gravatar/<?php echo $FRONT['comment.mailmd5'];?>">
         <div class="ho-content">
-            <div class="ho-name"><%=comment.username=%></div>
-            <div class="ho-info"><%=comment.website=%></div>
+            <div class="ho-name"><?php echo $FRONT['comment.username'];?></div>
+            <div class="ho-info"><?php echo $FRONT['comment.website'];?></div>
             <div class="ho-msg">
-                <%=comment.comment=%>
-                <div class="ho-time"><%=comment.time=%></div>
+                <?php echo $FRONT['comment.comment'];?>
+                <div class="ho-time"><?php echo $FRONT['comment.time'];?></div>
             </div>
         </div>
     </div>
-    <# endloop #>
+    <?php endforeach; ?>
 </div>
 <!-- Base Example -->
 <script>

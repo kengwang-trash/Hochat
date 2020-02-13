@@ -24,7 +24,6 @@ if (empty($_GET['path'])) {
 }
 define('SITE', parse_url(REALDIR, PHP_URL_HOST));
 require_once 'include.php';
-require_once CLASSDIR . 'theme.class.php';
 $AUTH = $DB->FetchResult(
     $DB->SelectData('auth', ['key' => $_GET['key']]),
     MYSQLI_ASSOC,
@@ -50,10 +49,20 @@ if (empty($_AUTH['theme'])) {
     $THEME = $_AUTH['theme'];
 }
 define('THEME', $THEME);
-include ('theme/' . THEME . '.theme.php');
+$FRONT=array(
+    'site'=>SITE
+);
+function arraytofront($prefix,$arr){
+    global $FRONT;
+    $r=array();
+    foreach ($arr as $k=>$v){
+        $FRONT[$prefix.'.'.$k]=$v;
+    }
+    return $r;
+}
 //select ,`cid`,`username`,`comment`,`site`,`time` from `hochat_comment`;
-$comments = $DB->FetchResult($DB->SelectData('comment', ['site' => SITE . PATH]), MYSQLI_ASSOC, true);
-
+$FRONT['comments'] = $DB->FetchResult($DB->Query("select md5(`mail`) as `mailmd5`,`cid`,`username`,`comment`,`site`,`time`,`website` from `hochat_comment`;"), MYSQLI_ASSOC, true);
+include ('theme/' . THEME . '.theme.php');
 
 ?>
 

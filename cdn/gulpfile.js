@@ -4,8 +4,10 @@
  */
 // Load plugins
 var theme = 'default';
+
 var gulp = require('gulp'),
     replace = require('gulp-replace'),
+    header = require('gulp-header'),
     sass = require('gulp-ruby-sass'),
     autoprefixer = require('gulp-autoprefixer'),
     minifycss = require('gulp-minify-css'),
@@ -27,6 +29,7 @@ var gulp = require('gulp'),
 // Styles
 gulp.task('styles', function () {
     return gulp.src('theme/' + theme + '/css/*.css')
+        .pipe(concat('main.css'))
         .pipe(sourcemaps.init())
         .pipe(autoprefixer({
             browsers: ['last 10 versions', 'Firefox >= 20', 'Opera >= 36', 'ie >= 9', 'Android >= 4.0',],
@@ -34,13 +37,13 @@ gulp.task('styles', function () {
             remove: false //是否删除不必要的前缀
         }))
         //.pipe(rename({ suffix: '.min' }))
-        .pipe(gulpif(conditionCss, cleancss({
-            keepSpecialComments: '*' //保留所有特殊前缀
-        })))
+        // .pipe(gulpif(conditionCss, cleancss({
+        //     keepSpecialComments: '*' //保留所有特殊前缀
+        // })))
         .pipe(minifycss())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('theme/' + theme + '/css'))
-        .pipe(notify({ message: 'Styles task complete' }));
+        .pipe(notify({message: 'Styles task complete'}));
 });
 
 // Scripts
@@ -56,53 +59,48 @@ gulp.task('scripts', function () {
         .pipe(sourcemaps.write('.'))
         .pipe(uglify())
         .pipe(gulp.dest('theme/' + theme + '/js'))
-        .pipe(notify({ message: 'Scripts task complete' }));
+        .pipe(notify({message: 'Scripts task complete'}));
 });
 
 //theme-make
 gulp.task('make-theme', function () {
-    return gulp.src('../theme/' + theme + '.theme.php')
-    .pipe(replace('<%= ','<%='))
-    .pipe(replace('<%=','<?php echo $FRONT[\''))
-    .pipe(replace('=%>','\']; ?>'))
-    .pipe(replace('<* loop','<?php foreach('))
-    .pipe(replace('<%','$FRONT[\''))
-    .pipe(replace('%>','\']'))
-    .pipe(replace('<* if','<?php if ('))
-    .pipe(replace('<*endif*>','<?php endif; ?>'))
-    .pipe(replace('<* endif*>','<?php endif; ?>'))
-    .pipe(replace('<* endif *>','<?php endif; ?>'))
-    .pipe(replace('<* endloop *>','<?php endforeach; ?>'))
-    .pipe(replace('<*endloop *>','<?php endforeach; ?>'))
-    .pipe(replace('<* endloop*>','<?php endforeach; ?>'))
-    .pipe(rename({extname:'.theme'}))
-    .pipe(gulp.dest('../theme/')
-    .pipe(notify({message: 'Theme make done!'})))
-})
+    return gulp.src('../theme/' + theme + '.html')
+        .pipe(header('<?php define(\'THEMENAME\',\''+theme+'\'); if (THEME!=THEMENAME) exit;?>\n'))
+        //<%= comment.username %=>
+        .pipe(replace(/<%=\s*(.*)\s*=%>/g, '<?php echo $FRONT[\'$1\'];?>'))
+        .pipe(replace(/<#\s*loop\s+(.*)\s+as\s+(.*)\s+#>/g, "<?php foreach ($FRONT['$1'] as $$$2): arraytofront('$2',$$$2); ?>"))
+        //<# if (%comment.username%="3") #>  ===>  if ($FRONT['comment.username'] == '3')
+        .pipe(replace(/<#\\s*if\\s+%(.*)%\\s*(==|!=)\\s*\"(.*)\"\\s*#>/g, "<?php if ($FRONT['$1']  $2 '$3':?>"))
+        .pipe(replace(/<#\s*endif\s*#>/g, "<?php endif; ?"))
+        .pipe(replace(/<#\s*endloop\s*#>/g, "<?php endforeach; ?>"))
+        .pipe(rename({extname: '.theme.php'}))
+        .pipe(gulp.dest('../theme/'))
+        .pipe(notify({message: 'Theme make done!'}));
+});
 
 //html
 gulp.task('html', function () {
     return gulp.src('../theme/' + theme + '.html')
         .pipe(htmlclean())
-        .pipe(htmlmin({
-            removeComments: true, //清除HTML注释
-            collapseWhitespace: true, //压缩HTML
-            minifyJS: true, //压缩页面JS
-            minifyCSS: true, //压缩页面CSS
-            minifyURLs: true
-        }))
-        .pipe(rename({ extname: '.theme.pre' }))
+        // .pipe(htmlmin({
+        //     removeComments: true, //清除HTML注释
+        //     collapseWhitespace: true, //压缩HTML
+        //     minifyJS: true, //压缩页面JS
+        //     minifyCSS: true, //压缩页面CSS
+        //     minifyURLs: true
+        // }))
+        .pipe(rename({extname: '.theme.pre'}))
         .pipe(gulp.dest('../theme/'))
         //.pipe(del('../theme/' + theme + '.html'))
-        .pipe(notify({ message: 'HTML task complete' }));
+        .pipe(notify({message: 'HTML task complete'}));
 });
 
 // Images
 gulp.task('images', function () {
     return gulp.src('theme/' + theme + '/img/*')
-        .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+        .pipe(cache(imagemin({optimizationLevel: 3, progressive: true, interlaced: true})))
         .pipe(gulp.dest('theme/' + theme + '/img'))
-        .pipe(notify({ message: 'Images task complete' }));
+        .pipe(notify({message: 'Images task complete'}));
 });
 
 /*
@@ -112,7 +110,7 @@ gulp.task('clean', function(cb) {
 });
 */
 // Default task
-gulp.task('default', gulp.series('scripts', 'images', 'styles', 'html','make-theme'));
+gulp.task('default', gulp.series('scripts', 'images', 'styles', 'make-theme'));
 
 // // Watch
 // gulp.task('watch', function() {
