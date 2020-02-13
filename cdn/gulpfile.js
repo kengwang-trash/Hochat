@@ -1,104 +1,69 @@
-(function () {
-    'use strict';
-    var gulp = require('gulp'),
-      minifycss = require('gulp-minify-css'),
-      cleancss = require('gulp-clean-css'),
-      imagemin = require('gulp-imagemin'),
-      autoprefixer = require('gulp-autoprefixer'),
-      uglify = require('gulp-uglify'),
-      sourcemaps = require('gulp-sourcemaps'),
-      gulpif = require('gulp-if'),
-      notify = require('gulp-notify'),
-      cache = require('gulp-cache'),
-      htmlclean = require('gulp-htmlclean'),
-      htmlmin = require('gulp-htmlmin'),
-      rev = require('gulp-rev-append'),
-      sequence = require('gulp-sequence'),
-      PATHS = {
-        ROOT: './',
-        DEST: './dist/',
-        HTML: '**/*.{html,htm}',
-        CSS: '**/*.css',
-        IMG: '**/*.{png,jpg,gif,ico}',
-        JS: '**/*.js'
-      }
-    /*====================================================
-        部署前代码处理
-    ====================================================*/
-  
-    var conditionJs = function (f) {
-      if (f.path.endsWith('.min.js')) {
-        return false;
-      }
-      return true;
-    };
-    var conditionCss = function (f) {
-      if (f.path.endsWith('.min.css')) {
-        return false;
-      }
-      return true;
-    };
-  
-    // 压缩处理 css
-    gulp.task('minify-css', function () {
-      return gulp.src([PATHS.CSS,'!./dist/**', '!./node_modules/**'])
-        .pipe(sourcemaps.init())
-        .pipe(autoprefixer({
-          browsers: ['last 10 versions', 'Firefox >= 20', 'Opera >= 36', 'ie >= 9', 'Android >= 4.0', ],
-          cascade: true, //是否美化格式
-          remove: false //是否删除不必要的前缀
-        }))
-        .pipe(gulpif(conditionCss, cleancss({
-          keepSpecialComments: '*' //保留所有特殊前缀
-        })))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(PATHS.DEST))
-        .pipe(notify({ message: 'css minify complete' }));
-    });
-  
-    // 压缩处理 img
-    gulp.task('minify-img', function () {
-      return gulp.src([PATHS.IMG,'!./dist/**', '!./node_modules/**'])
-        .pipe(cache(imagemin()))
-        .pipe(gulp.dest(PATHS.DEST));
-    })
-  
-    // 压缩处理 js
-    gulp.task('minify-js', function () {
-      return gulp.src([PATHS.JS, '!./dist/**', '!./node_modules/**', '!gulpfile.js'])
-        .pipe(sourcemaps.init())
-        .pipe(gulpif(conditionJs, uglify()))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(PATHS.DEST))
-        .pipe(notify({ message: 'js minify complete' }));
-    });
-  
-    // 压缩处理 html
-    gulp.task('minify-html', function () {
-      return gulp.src(PATHS.DEST+PATHS.HTML)
-        .pipe(htmlclean())
-        .pipe(htmlmin({
-          removeComments: true, //清除HTML注释
-          collapseWhitespace: true, //压缩HTML
-          minifyJS: true, //压缩页面JS
-          minifyCSS: true, //压缩页面CSS
-          minifyURLs: true
-        }))
-        .pipe(gulp.dest(PATHS.DEST));
-    });
-  
-    // 添加版本号
-    gulp.task('rev', function () {
-      return gulp.src([PATHS.HTML,'!./dist/**', '!./node_modules/**'])
-        .pipe(rev())
-        .pipe(gulp.dest(PATHS.DEST));
-    });
-  
-    // 同步执行task
-    gulp.task('deploy', sequence(['minify-css', 'minify-js'], 'minify-img', 'rev', 'minify-html'));
-  
-    // 部署前代码处理
-    gulp.task('default', ['deploy'], function (e) {
-      console.log("[complete] Please continue to operate");
-    })
-  })();
+/*!
+ * gulp
+ * $ npm install gulp-ruby-sass gulp-autoprefixer gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-rename gulp-livereload gulp-cache del --save-dev
+ */
+// Load plugins
+var gulp = require('gulp'),
+    sass = require('gulp-ruby-sass'),
+    autoprefixer = require('gulp-autoprefixer'),
+    minifycss = require('gulp-minify-css'),
+    jshint = require('gulp-jshint'),
+    uglify = require('gulp-uglify'),
+    imagemin = require('gulp-imagemin'),
+    rename = require('gulp-rename'),
+    concat = require('gulp-concat'),
+    notify = require('gulp-notify'),
+    cache = require('gulp-cache'),
+    livereload = require('gulp-livereload'),
+    del = require('del');
+// Styles
+gulp.task('styles', function() {
+  return gulp.src('src/styles/main.scss')
+    .pipe(sass({ style: 'expanded', }))
+    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+    .pipe(gulp.dest('dist/styles'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(minifycss())
+    .pipe(gulp.dest('dist/styles'))
+    .pipe(notify({ message: 'Styles task complete' }));
+});
+// Scripts
+gulp.task('scripts', function() {
+  return gulp.src('src/scripts/**/*.js')
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
+    .pipe(concat('main.js'))
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(notify({ message: 'Scripts task complete' }));
+});
+// Images
+gulp.task('images', function() {
+  return gulp.src('src/images/**/*')
+    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+    .pipe(gulp.dest('dist/images'))
+    .pipe(notify({ message: 'Images task complete' }));
+});
+// Clean
+gulp.task('clean', function(cb) {
+    del(['dist/assets/css', 'dist/assets/js', 'dist/assets/img'], cb)
+});
+// Default task
+gulp.task('default', ['clean'], function() {
+    gulp.start('styles', 'scripts', 'images');
+});
+// Watch
+gulp.task('watch', function() {
+  // Watch .scss files
+  gulp.watch('src/styles/**/*.scss', ['styles']);
+  // Watch .js files
+  gulp.watch('src/scripts/**/*.js', ['scripts']);
+  // Watch image files
+  gulp.watch('src/images/**/*', ['images']);
+  // Create LiveReload server
+  livereload.listen();
+  // Watch any files in dist/, reload on change
+  gulp.watch(['dist/**']).on('change', livereload.changed);
+});
