@@ -42,7 +42,7 @@ gulp.task('styles', function () {
         // })))
         .pipe(minifycss())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('theme/' + theme + '/css'))
+        .pipe(gulp.dest('cdn/theme/' + theme + '/css'))
         .pipe(notify({message: 'Styles task complete'}));
 });
 
@@ -58,14 +58,14 @@ gulp.task('scripts', function () {
         .pipe(concat('main.js'))
         .pipe(sourcemaps.write('.'))
         .pipe(uglify())
-        .pipe(gulp.dest('theme/' + theme + '/js'))
+        .pipe(gulp.dest('cdn/theme/' + theme + '/js'))
         .pipe(notify({message: 'Scripts task complete'}));
 });
 
 //theme-make
 gulp.task('make-theme', function () {
-    return gulp.src('../theme/' + theme + '.html')
-        .pipe(header('<?php define(\'THEMENAME\',\''+theme+'\'); if (THEME!=THEMENAME) exit;?>\n'))
+    return gulp.src('theme/' + theme + '/' + theme + '.html')
+        .pipe(header('<?php define(\'THEMENAME\',\'' + theme + '\'); if (THEME!=THEMENAME) exit;?>\n'))
         //<%= comment.username %=>
         .pipe(replace(/<%=\s*(.*)\s*=%>/g, '<?php echo $FRONT[\'$1\'];?>'))
         .pipe(replace(/<#\s*loop\s+(.*)\s+as\s+(.*)\s+#>/g, "<?php foreach ($FRONT['$1'] as $$$2): arraytofront('$2',$$$2); ?>"))
@@ -74,13 +74,13 @@ gulp.task('make-theme', function () {
         .pipe(replace(/<#\s*endif\s*#>/g, "<?php endif; ?"))
         .pipe(replace(/<#\s*endloop\s*#>/g, "<?php endforeach; ?>"))
         .pipe(rename({extname: '.theme.php'}))
-        .pipe(gulp.dest('../theme/'))
+        .pipe(gulp.dest('theme/'))
         .pipe(notify({message: 'Theme make done!'}));
 });
 
 //html
 gulp.task('html', function () {
-    return gulp.src('../theme/' + theme + '.html')
+    return gulp.src('theme/' + theme + '/' + theme + '.html')
         .pipe(htmlclean())
         // .pipe(htmlmin({
         //     removeComments: true, //清除HTML注释
@@ -90,7 +90,7 @@ gulp.task('html', function () {
         //     minifyURLs: true
         // }))
         .pipe(rename({extname: '.theme.pre'}))
-        .pipe(gulp.dest('../theme/'))
+        .pipe(gulp.dest('theme/' + theme + '/'))
         //.pipe(del('../theme/' + theme + '.html'))
         .pipe(notify({message: 'HTML task complete'}));
 });
