@@ -10,7 +10,9 @@
  * 建议先清除掉日志,再引发错误之后查看
  */
 define('PASSWORD', 'saveme'); //SaveMe密码,在安装后修改
-if (!$_GET['P'] == PASSWORD) exit;
+if (!$_GET['P'] == PASSWORD) {
+    exit;
+}
 $file_path = "error.log";
 if ($_GET['d'] == 1) {
     echo file_get_contents($file_path);
@@ -53,5 +55,5 @@ if ($_GET['c'] == 1) {
     }
     echo '</table>';
     ?>
-    您还可以<a href="saveme.php?P=<?php echo $_GET['P']; ?>&d=1">点我</a>此处查看全部日志<br />
+    您还可以<a href="saveme.php?P=<?php echo $_GET['P']; ?>&d=1">点我</a>此处查看全部日志<br/>
     您还可以<a href="saveme.php?P=<?php echo $_GET['P']; ?>&c=1">点我</a>清除全部日志

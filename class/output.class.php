@@ -2,7 +2,8 @@
 
 class Output
 {
-    public static function Display($status, $msg, $data = array())
+
+    public static function Display($status, $msg, $data = [])
     {
         if (count($_POST) == 0) {
             self::RawOutput($status, $msg);
@@ -16,18 +17,23 @@ class Output
         echo $msg;
     }
 
-    public static function JSONOutput($status, $msg, $data = array())
+    public static function JSONOutput($status, $msg, $data = [])
     {
         header('Content-type: text/json');
-        $arr = array(
+        $arr = [
             'status' => $status,
             'msg' => $msg,
-            'data' => $data
-        );
+            'data' => $data,
+        ];
         echo json_encode($arr);
     }
 
-    public static function CutHtml($string, $length, $postfix = '&hellip;', $isHtml = true)
+    public static function CutHtml(
+        $string,
+        $length,
+        $postfix = '&hellip;',
+        $isHtml = true
+    )
     {
         $string = trim($string);
         $postfix = (strlen(strip_tags($string)) > $length) ? $postfix : '';
@@ -35,7 +41,12 @@ class Output
         $tags = []; // change to array() if php version < 5.4
 
         if ($isHtml) {
-            preg_match_all('/<[^>]+>([^<]*)/', $string, $tagMatches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+            preg_match_all(
+                '/<[^>]+>([^<]*)/',
+                $string,
+                $tagMatches,
+                PREG_OFFSET_CAPTURE | PREG_SET_ORDER
+            );
             foreach ($tagMatches as $tagMatch) {
                 if ($tagMatch[0][1] - $i >= $length) {
                     break;
@@ -52,7 +63,11 @@ class Output
             }
         }
 
-        return substr($string, 0, $length = min(strlen($string), $length + $i)) . (count($tags = array_reverse($tags)) ? '</' . implode('></', $tags) . '>' : '') . $postfix;
+        return substr($string, 0, $length = min(strlen($string), $length + $i))
+            . (count(
+                $tags = array_reverse($tags)
+            ) ? '</' . implode('></', $tags) . '>' : '') . $postfix;
     }
+
 }
 

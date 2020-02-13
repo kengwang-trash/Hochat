@@ -2,20 +2,16 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hochat 测试页面</title>
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>HOCHAT 测试页面</title>
 </head>
 <body>
+<div id="hochat_container"></div>
+<script src="https://cdn.hochat.space/hochat.js"></script>
 <script>
-    //监听message事件
-    window.addEventListener("message", function (event) {
-         if (event.origin==="https://api.hochat.space"){
-            document.getElementById("hochat_iframe").style.height=(event.data+30)+"px";
-         }
-    }, false);
+    new Hochat("firefoxchina","#hochat_container");
 </script>
-<iframe id="hochat_iframe" style="border: none;" referrerpolicy="unsafe-url" src="https://api.hochat.space/comment.php?key=default"></iframe>
 </body>
 </html>
