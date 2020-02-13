@@ -2,7 +2,6 @@
 
 class ErrorHandle
 {
-
     public static function Error(
         $error_level,
         $error_message,
@@ -48,6 +47,6 @@ class ErrorHandle
 }
 
 //开发的时候取消注释即可查看错误
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1');
-set_error_handler("ErrorHandle::Error");
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+//set_error_handler("ErrorHandle::Error");

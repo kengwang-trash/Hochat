@@ -24,7 +24,7 @@ if (empty($_GET['path'])) {
 }
 define('SITE', parse_url(REALDIR, PHP_URL_HOST));
 require_once 'include.php';
-
+require_once CLASSDIR . 'theme.class.php';
 $AUTH = $DB->FetchResult(
     $DB->SelectData('auth', ['key' => $_GET['key']]),
     MYSQLI_ASSOC,
@@ -44,16 +44,39 @@ if ($AUTH['site'] != SITE) {
 
 define('PRO', $AUTH['pro'] == 1 ? true : false);
 
-$comments = $DB->FetchResult($DB->SelectData('comment', ['site' => SITE.PATH]), MYSQLI_ASSOC, true);
+if (empty($_AUTH['theme'])) {
+    $THEME = 'default';
+} else {
+    $THEME = $_AUTH['theme'];
+}
+define('THEME', $THEME);
+$themefile = file_get_contents('theme/' . THEME . '.theme');
+$search = array(
+    '<%= ',
+    '<%=',
+    '=%>',
+    '<* loop',
+    '*>',
+    '<* if',
+    '<%',
+    '%>'
+);
+
+$replace = array(
+    '<%=',
+    '<?php echo $FRONT[\'',
+    '\']; ?>',
+    '<?php foreach(',
+    '): ?>',
+    '<?php if (',
+    '$FRONT[\'',
+    '\']'
+);
+str_replace('<=', '<?php echo ', $themefile);
+//select ,`cid`,`username`,`comment`,`site`,`time` from `hochat_comment`;
+$comments = $DB->FetchResult($DB->SelectData('comment', ['site' => SITE . PATH]), MYSQLI_ASSOC, true);
+
+
 ?>
-<script>
-    window.addEventListener('load', function () {
-        window.parent.postMessage(document.body.offsetHeight, "*");
-    });
-</script>
-<body>
-在这里留言吧
-<?php foreach ($comments as $comment) {
-    print_r($comment);
-} ?>
-</body>
+
+

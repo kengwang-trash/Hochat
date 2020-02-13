@@ -222,12 +222,7 @@ class DB
      *
      * @return mysqli_result 返回mysql_result结果,自行转换
      */
-    public function SelectData(
-        $table,
-        $where = [],
-        $place = [],
-        $other = ""
-    )
+    public function SelectData($table, $where = [], $place = [], $other = "")
     {
         if (count($where)) {
             $w = ' WHERE ';
