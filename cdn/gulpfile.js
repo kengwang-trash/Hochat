@@ -61,7 +61,7 @@ gulp.task('scripts', function () {
 
 //theme-make
 gulp.task('make-theme', function () {
-    return gulp.src('../theme/' + theme + '.theme.pre')
+    return gulp.src('../theme/' + theme + '.theme.php')
     .pipe(replace('<%= ','<%='))
     .pipe(replace('<%=','<?php echo $FRONT[\''))
     .pipe(replace('=%>','\']; ?>'))
@@ -69,6 +69,12 @@ gulp.task('make-theme', function () {
     .pipe(replace('<%','$FRONT[\''))
     .pipe(replace('%>','\']'))
     .pipe(replace('<* if','<?php if ('))
+    .pipe(replace('<*endif*>','<?php endif; ?>'))
+    .pipe(replace('<* endif*>','<?php endif; ?>'))
+    .pipe(replace('<* endif *>','<?php endif; ?>'))
+    .pipe(replace('<* endloop *>','<?php endforeach; ?>'))
+    .pipe(replace('<*endloop *>','<?php endforeach; ?>'))
+    .pipe(replace('<* endloop*>','<?php endforeach; ?>'))
     .pipe(rename({extname:'.theme'}))
     .pipe(gulp.dest('../theme/')
     .pipe(notify({message: 'Theme make done!'})))
@@ -106,7 +112,7 @@ gulp.task('clean', function(cb) {
 });
 */
 // Default task
-gulp.task('default', gulp.series('scripts', 'images', 'styles', 'html'));
+gulp.task('default', gulp.series('scripts', 'images', 'styles', 'html','make-theme'));
 
 // // Watch
 // gulp.task('watch', function() {

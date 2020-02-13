@@ -40,15 +40,15 @@
     <div class="ho-chat">
         <img src="https://cdn.v2ex.com/gravatar/<%==%>">
         <div class="ho-content">
-            <div class="ho-name"><{$comment['username']}></div>
-            <div class="ho-info"><{$comment['mail']}></div>
+            <div class="ho-name"><%=comment.username=%></div>
+            <div class="ho-info"><%=comment.mailmd5=%></div>
             <div class="ho-msg">
-                <{$comment['comment']}>
-                <div class="ho-time"><{$comment['time']}></div>
+                <%=comment.comment=%>
+                <div class="ho-time"><%=comment.time=%></div>
             </div>
         </div>
     </div>
-    <>
+    <* endloop *>
 </div>
 <!-- Base Example -->
 <script>

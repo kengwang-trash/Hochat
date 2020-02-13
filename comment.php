@@ -50,29 +50,7 @@ if (empty($_AUTH['theme'])) {
     $THEME = $_AUTH['theme'];
 }
 define('THEME', $THEME);
-$themefile = file_get_contents('theme/' . THEME . '.theme');
-$search = array(
-    '<%= ',
-    '<%=',
-    '=%>',
-    '<* loop',
-    '*>',
-    '<* if',
-    '<%',
-    '%>'
-);
-
-$replace = array(
-    '<%=',
-    '<?php echo $FRONT[\'',
-    '\']; ?>',
-    '<?php foreach(',
-    '): ?>',
-    '<?php if (',
-    '$FRONT[\'',
-    '\']'
-);
-str_replace('<=', '<?php echo ', $themefile);
+include ('theme/' . THEME . '.theme.php');
 //select ,`cid`,`username`,`comment`,`site`,`time` from `hochat_comment`;
 $comments = $DB->FetchResult($DB->SelectData('comment', ['site' => SITE . PATH]), MYSQLI_ASSOC, true);
 
