@@ -4,3 +4,7 @@ phpMyAdmin4.8.5
 node_modules
 package-lock.json
 
+cdn/theme/*
+cdn/theme/default/font/hochat.otf
+cdn/theme/default/css/main.css.map
+cdn/theme/default/css/main.css

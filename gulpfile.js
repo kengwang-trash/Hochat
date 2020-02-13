@@ -14,6 +14,7 @@ var gulp = require('gulp'),
     cleancss = require('gulp-clean-css'),
     jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
+    babel = require('gulp-babel'),
     sourcemaps = require('gulp-sourcemaps'),
     imagemin = require('gulp-imagemin'),
     rename = require('gulp-rename'),
@@ -28,7 +29,7 @@ var gulp = require('gulp'),
 
 // Styles
 gulp.task('styles', function () {
-    return gulp.src('theme/' + theme + '/css/*.css')
+    return gulp.src('theme/' + theme + '/style/*.css')
         .pipe(concat('main.css'))
         .pipe(sourcemaps.init())
         .pipe(autoprefixer({
@@ -42,14 +43,17 @@ gulp.task('styles', function () {
         // })))
         .pipe(minifycss())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('cdn/theme/' + theme + '/css'))
+        .pipe(gulp.dest('cdn/theme/' + theme + '/style'))
         .pipe(notify({message: 'Styles task complete'}));
 });
 
 // Scripts
 gulp.task('scripts', function () {
-    return gulp.src('theme/' + theme + '/js/*.js')
+    return gulp.src(['theme/' + theme + '/js/*.js'])
         .pipe(sourcemaps.init())
+        /*.pipe(babel({
+            presets: ['es2015']
+        }))*/
         .pipe(jshint({
             'undef': true,
             'unused': true
@@ -57,7 +61,7 @@ gulp.task('scripts', function () {
         .pipe(jshint.reporter('default'))
         .pipe(concat('main.js'))
         .pipe(sourcemaps.write('.'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('cdn/theme/' + theme + '/js'))
         .pipe(notify({message: 'Scripts task complete'}));
 });
@@ -89,7 +93,7 @@ gulp.task('html', function () {
         //     minifyCSS: true, //压缩页面CSS
         //     minifyURLs: true
         // }))
-        .pipe(rename({extname: '.theme.pre'}))
+        .pipe(rename({extname: '.theme.html'}))
         .pipe(gulp.dest('theme/' + theme + '/'))
         //.pipe(del('../theme/' + theme + '.html'))
         .pipe(notify({message: 'HTML task complete'}));
@@ -99,7 +103,7 @@ gulp.task('html', function () {
 gulp.task('images', function () {
     return gulp.src('theme/' + theme + '/img/*')
         .pipe(cache(imagemin({optimizationLevel: 3, progressive: true, interlaced: true})))
-        .pipe(gulp.dest('theme/' + theme + '/img'))
+        .pipe(gulp.dest('cdn/theme/' + theme + '/img'))
         .pipe(notify({message: 'Images task complete'}));
 });
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>HoChat</title>
-    <link rel="stylesheet" href="https://cdn.hochat.space/theme/default/css/main.css">
+    <link rel="stylesheet" href="https://cdn.hochat.space/theme/default/style/main.css">
 </head>
 <body>
 
@@ -40,7 +40,7 @@
     </div>
 	<?php foreach ($FRONT['comments'] as $comment): arraytofront('comment',$comment); ?>
     <div class="ho-chat">
-        <img src="https://cdn.v2ex.com/gravatar/<?php echo $FRONT['comment.mailmd5'];?>">
+        <img onerror="this.src='https://cdn.hochat.space/img/avatar.png'" src="https://cdn.v2ex.com/gravatar/<?php echo $FRONT['comment.mailmd5'];?>?d=https%3a%2f%2fcdn.hochat.space%2fimg%2favatar.png">
         <div class="ho-content">
             <div class="ho-name"><?php echo $FRONT['comment.username'];?></div>
             <div class="ho-info"><?php echo $FRONT['comment.website'];?></div>
