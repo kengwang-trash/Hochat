@@ -1,3 +1,5 @@
 
 phpMyAdmin4.8.5
 .idea
+node_modules
+package-lock.json
